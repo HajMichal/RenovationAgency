@@ -10,10 +10,11 @@ generator client {
 model User {
   id        Int @default(autoincrement()) @unique
   name      String
-  email     String
+  email     String  @unique
+  phone     String  @unique
   adress    String
   password  String
-  createdat DateTime
+  createdat DateTime @default(now())
 
   contractor Contractor?
   building  Building[]
@@ -22,9 +23,10 @@ model User {
 model Contractor {
   id               Int       @default(autoincrement()) @unique
   companyName      String
-  companyEmail     String
+  companyEmail     String   @unique
+  companyPhone     String   @unique
   companyAdress    String
-  nip              String?
+  nip              String?  @unique
   createdat        DateTime
 
   userId           Int       @unique

@@ -1,4 +1,5 @@
-import { LoginDto } from './loginDto';
-import { CreateUserDto } from './create-user.dto';
+import { LoginDto } from './login.dto';
+import { CreateUserDto } from './create.dto';
+import { UpdateDto } from './update.dto';
 
-export { LoginDto, CreateUserDto };
+export { LoginDto, CreateUserDto, UpdateDto };

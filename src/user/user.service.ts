@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto, LoginDto } from './dto';
+import { CreateUserDto, LoginDto, UpdateDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -17,17 +17,14 @@ export class UserService {
   ) {}
 
   async createUser(data: CreateUserDto) {
-    const isUserExists = await this.prisma.user.findFirst({
-      where: { OR: [{ email: data.email }, { phone: data.phone }] },
-    });
+    const user = await this.findFirstUser(data.email, data.phone);
 
-    if (isUserExists)
+    if (user)
       throw new ConflictException(
         'User with this Email or Phone number already exists',
       );
 
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(data.password, salt);
+    const hashedPassword = await this.hashPassword(data.password);
 
     return this.prisma.user.create({
       data: { ...data, password: hashedPassword },
@@ -45,11 +42,7 @@ export class UserService {
   }
 
   async signIn({ login, password }: LoginDto) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        OR: [{ email: login }, { phone: login }],
-      },
-    });
+    const user = await this.findFirstUser(login, login);
     if (!user) throw new UnauthorizedException('Incorrect data');
 
     const isPwdCorrect = bcrypt.compareSync(password, user.password);
@@ -61,5 +54,46 @@ export class UserService {
         secret: process.env.SECRET_KEY,
       }),
     };
+  }
+
+  async updateUser(data: UpdateDto) {
+    const user = await this.findFirstUser(data.email, data.phone);
+    if (user)
+      throw new ConflictException('This Email or Phone number is taken');
+    const hashedPassword = await this.hashPassword(data.password);
+    const updatedUser = this.prisma.user.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        adress: data.adress,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: hashedPassword,
+      },
+    });
+    return updatedUser;
+  }
+
+  async deleteUser(id: number) {
+    return await this.prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async hashPassword(password: string | undefined) {
+    const salt = await bcrypt.genSalt();
+    if (password) return await bcrypt.hash(password, salt);
+  }
+
+  async findFirstUser(email: string, phone: string) {
+    return await this.prisma.user.findFirst({
+      where: {
+        OR: [{ email: email }, { phone: phone }],
+      },
+    });
   }
 }

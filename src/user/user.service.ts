@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto, LoginDto, UpdateDto } from './dto';
+import { LoginDto, UpdateDto, CreateUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -84,12 +84,12 @@ export class UserService {
     });
   }
 
-  async hashPassword(password: string | undefined) {
+  private async hashPassword(password: string | undefined) {
     const salt = await bcrypt.genSalt();
     if (password) return await bcrypt.hash(password, salt);
   }
 
-  async findFirstUser(email: string, phone: string) {
+  private async findFirstUser(email: string, phone: string) {
     return await this.prisma.user.findFirst({
       where: {
         OR: [{ email: email }, { phone: phone }],

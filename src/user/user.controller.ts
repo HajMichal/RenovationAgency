@@ -9,11 +9,12 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common';
+import { Public } from 'src/auth/auth.guard';
 import { UserService } from './user.service';
-import { User } from '@prisma/client';
 import { ZodValidationPipe } from 'src/zod/ZodValidationPipe';
-import { createUserSchema, loginSchema } from './schema';
-import { LoginDto, CreateUserDto, UpdateDto } from './dto';
+import { CreateUserDto, LoginDto, UpdateDto } from './dto';
+import { createUserSchema, loginSchema } from './schemas';
+import { User } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
@@ -24,12 +25,17 @@ export class UserController {
     return this.userService.getUser(id);
   }
 
+  // Public is custom decorator, enables hit this endpoint by not authenticated users
+  @Public()
   @Post('/signup')
+  // This line is validating is data is provided in correct structure,
+  // if no the error is sending immediately
   @UsePipes(new ZodValidationPipe(createUserSchema))
   createUser(@Body() createUserData: CreateUserDto): Promise<CreateUserDto> {
     return this.userService.createUser(createUserData);
   }
 
+  @Public()
   @Post('/signin')
   @UsePipes(new ZodValidationPipe(loginSchema))
   login(@Body() loginData: LoginDto) {

@@ -5,5 +5,4 @@ export declare class CreateBuildingDto {
   zipcode: string;
   description: string;
   estimatedcost: string;
-  userId: number;
 }

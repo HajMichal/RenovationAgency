@@ -16,7 +16,6 @@ export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 export class AuthService implements CanActivate {
   constructor(
     private jwtServices: JwtService,
-    //  Reflector helps enable access to route roles
     private reflector: Reflector,
   ) {}
 

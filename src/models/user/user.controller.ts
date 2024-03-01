@@ -9,9 +9,9 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common';
-import { Public } from 'src/auth/auth.guard';
+import { Public } from 'src/common/auth/auth.guard';
 import { UserService } from './user.service';
-import { ZodValidationPipe } from 'src/zod/ZodValidationPipe';
+import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
 import { CreateUserDto, LoginDto, UpdateDto } from './dto';
 import { createUserSchema, loginSchema } from './schemas';
 import { User } from '@prisma/client';
@@ -21,7 +21,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get(':id')
-  getUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  getUser(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
     return this.userService.getUser(id);
   }
 
@@ -30,14 +30,14 @@ export class UserController {
   @Post('/signup')
   // This line is validating is data is provided in correct structure,
   // if no the error is sending immediately
-  @UsePipes(new ZodValidationPipe(createUserSchema))
+  @UsePipes(new DataValidationPipe(createUserSchema))
   createUser(@Body() createUserData: CreateUserDto): Promise<CreateUserDto> {
     return this.userService.createUser(createUserData);
   }
 
   @Public()
   @Post('/signin')
-  @UsePipes(new ZodValidationPipe(loginSchema))
+  @UsePipes(new DataValidationPipe(loginSchema))
   login(@Body() loginData: LoginDto) {
     return this.userService.signIn(loginData);
   }

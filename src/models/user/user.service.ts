@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/providers/prisma/prisma.service';
 import { LoginDto, UpdateDto, CreateUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -31,14 +31,16 @@ export class UserService {
     });
   }
 
-  async getUser(id: number) {
-    const user = await this.prisma.user.findUnique({
+  async getUser(id: number, includeBuilding?: boolean) {
+    if (id) throw new NotFoundException('User not found');
+    return await this.prisma.user.findUnique({
       where: {
         id: id,
       },
+      include: {
+        building: includeBuilding ?? false,
+      },
     });
-    if (!user) throw new NotFoundException('User not found');
-    return user;
   }
 
   async signIn({ login, password }: LoginDto) {
@@ -48,7 +50,7 @@ export class UserService {
     const isPwdCorrect = bcrypt.compareSync(password, user.password);
     if (!isPwdCorrect) throw new UnauthorizedException('Incorrect data');
 
-    const payload = { sub: user.id, email: user.email, name: user.name };
+    const payload = { id: user.id, email: user.email, name: user.name };
     return {
       access_token: await this.jwtService.signAsync(payload, {
         secret: process.env.SECRET_KEY,

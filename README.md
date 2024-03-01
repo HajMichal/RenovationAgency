@@ -18,10 +18,12 @@
   * set as default block access to endpoints by unauthenticated users, [✔️]
   * create custom @Public decorator, [✔️]
   * registration and login set as Public [✔️]
+
  - Create building module with:
   * setting new buildings to renovate, 
   * Patch request to update the advertisment,
   * Delete request to remove advertisment
+  
  - Create get all Buildings endpoint, set it as Public
  - List with buildings can be filtered by:
   * estimated cost,
@@ -36,3 +38,6 @@
 ## Ideas:
  - user can set a opinion about constructor job
  - users can review constructors and theirs opinion
+
+ # TODO:
+### Create interceptor/guard/pipe which will check if id of model (building, user, ...rest) is equal to provided id by client 

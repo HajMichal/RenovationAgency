@@ -38,6 +38,7 @@
 ## Ideas:
  - user can set a opinion about constructor job
  - users can review constructors and theirs opinion
+ - make role admin, he has access to update/delete all elements in app
 
  # TODO:
 ### Create interceptor/guard/pipe which will check if id of model (building, user, ...rest) is equal to provided id by client 

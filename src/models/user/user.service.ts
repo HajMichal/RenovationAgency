@@ -32,7 +32,7 @@ export class UserService {
   }
 
   async getUser(id: number, includeBuilding?: boolean) {
-    if (id) throw new NotFoundException('User not found');
+    if (!id) throw new NotFoundException('User not found');
     return await this.prisma.user.findUnique({
       where: {
         id: id,
@@ -59,7 +59,7 @@ export class UserService {
   }
 
   async updateUser(data: UpdateDto) {
-    const user = await this.findFirstUser(data.email, data.phone);
+    const user = await this.findFirstUser(data?.email, data.phone);
     if (user)
       throw new ConflictException('This Email or Phone number is taken');
     const hashedPassword = await this.hashPassword(data.password);
@@ -79,6 +79,8 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
+    const user = await this.getUser(id);
+    if (!user) throw new NotFoundException();
     return await this.prisma.user.delete({
       where: {
         id: id,
@@ -91,7 +93,7 @@ export class UserService {
     if (password) return await bcrypt.hash(password, salt);
   }
 
-  private async findFirstUser(email: string, phone: string) {
+  private async findFirstUser(email?: string, phone?: string) {
     return await this.prisma.user.findFirst({
       where: {
         OR: [{ email: email }, { phone: phone }],

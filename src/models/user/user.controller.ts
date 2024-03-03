@@ -7,16 +7,19 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { Public } from 'src/common/auth/auth.guard';
 import { UserService } from './user.service';
 import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
 import { CreateUserDto, LoginDto, UpdateDto } from './dto';
-import { createUserSchema, loginSchema } from './schemas';
+import { createUserSchema, loginSchema, updateSchema } from './schemas';
 import { User } from '@prisma/client';
+import { user } from 'src/common/constatns/modelsEndpoints';
+import { idMatchInterceptor } from 'src/common/interceptors';
 
-@Controller('user')
+@Controller(user)
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -43,11 +46,14 @@ export class UserController {
   }
 
   @Patch('/update')
+  @UsePipes(new DataValidationPipe(updateSchema))
+  @UseInterceptors(idMatchInterceptor)
   updateUser(@Body() userData: UpdateDto) {
     return this.userService.updateUser(userData);
   }
 
   @Delete('/remove/:id')
+  @UseInterceptors(idMatchInterceptor)
   removeUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.deleteUser(id);
   }

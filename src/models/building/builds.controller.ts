@@ -13,8 +13,11 @@ import { BuildsService } from './builds.service';
 import { CreateBuildingDto, UpdateBuildingDto } from './dto';
 import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
 import { createBuildingSchema, updateBuildingSchema } from './schema';
+import { building } from 'src/common/constatns/modelsEndpoints';
+import { User } from 'src/common/decorators';
+import { UserDto } from '../user/dto/';
 
-@Controller('builds')
+@Controller(building)
 export class BuildsController {
   constructor(private buildsService: BuildsService) {}
 
@@ -29,12 +32,15 @@ export class BuildsController {
 
   @Patch('update')
   @UsePipes(new DataValidationPipe(updateBuildingSchema))
-  updateBuilding(@Body() updateBuildingData: UpdateBuildingDto) {
-    return this.buildsService.updateBuilding(updateBuildingData);
+  updateBuilding(
+    @Body() updateBuildingData: UpdateBuildingDto,
+    @User() user: UserDto,
+  ) {
+    return this.buildsService.updateBuilding(updateBuildingData, user.id);
   }
 
   @Delete('remove/:id')
-  removeBuilding(@Param('id', ParseIntPipe) id: number) {
-    return this.buildsService.removeBuilding(id);
+  removeBuilding(@Param('id', ParseIntPipe) id: number, @User() user: UserDto) {
+    return this.buildsService.removeBuilding(id, user.id);
   }
 }

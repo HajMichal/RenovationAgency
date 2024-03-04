@@ -21,15 +21,23 @@ export class BuildsService {
     const token = auth.split(' ') ?? [];
     const { id } = this.jwtService.decode(token[1]);
     const user = await this.userService.getUser(id, true);
+    const { date, ...dataToCreateBuilding } = data;
 
     if (user && user.building.length > 3)
       throw new ConflictException('Your account has too many advertisments');
-    return this.prisma.building.create({
+    const building = await this.prisma.building.create({
       data: {
-        ...data,
+        ...dataToCreateBuilding,
         userId: id,
+        booking: {
+          create: {
+            deadline: new Date(date),
+          },
+        },
       },
     });
+
+    return building;
   }
 
   // first page provides page as 0, second as 1, third as 2, etc...
@@ -44,6 +52,9 @@ export class BuildsService {
           { estimatedcost: { lte: filters.lt } },
         ],
         zipcode: { contains: filters.zipcode },
+      },
+      include: {
+        booking: true,
       },
     });
   }

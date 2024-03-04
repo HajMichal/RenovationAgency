@@ -29,6 +29,7 @@
   * estimated cost, [✔️]
   * city, [✔️]
   * zip-code, [✔️]
+  * deadline
  - Make reservation for buildings only by constructors
  - top 5 contractors with the greatest number of bookings
  - top 5 contractors with the greatest number of upcoming bookings (don't count any past bookings)

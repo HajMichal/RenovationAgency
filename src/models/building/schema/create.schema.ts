@@ -7,5 +7,6 @@ export const createBuildingSchema = z
     zipcode: z.string(),
     description: z.string(),
     estimatedcost: z.string(),
+    date: z.string(),
   })
   .required();

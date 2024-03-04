@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/providers/prisma/prisma.service';
-import { CreateBuildingDto, UpdateBuildingDto } from './dto';
+import { CreateBuildingDto, FiltersDto, UpdateBuildingDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/models/user/user.service';
 
@@ -28,6 +28,22 @@ export class BuildsService {
       data: {
         ...data,
         userId: id,
+      },
+    });
+  }
+
+  // first page provides page as 0, second as 1, third as 2, etc...
+  async getAllBuildings(page: number, filters: FiltersDto) {
+    return await this.prisma.building.findMany({
+      take: 10,
+      skip: 10 * page,
+      where: {
+        city: { contains: filters.city },
+        AND: [
+          { estimatedcost: { gte: filters.gt } },
+          { estimatedcost: { lte: filters.lt } },
+        ],
+        zipcode: { contains: filters.zipcode },
       },
     });
   }

@@ -5,22 +5,20 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/providers/prisma/prisma.service';
-import { CreateBuildingDto, FiltersDto, UpdateBuildingDto } from './dto';
-import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/models/user/user.service';
+import { CreateBuildingDto, filterBuildingDto, UpdateBuildingDto } from './dto';
 
 @Injectable()
-export class BuildsService {
+export class BuildingsService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService,
     private userService: UserService,
   ) {}
 
-  async createBuilding(data: CreateBuildingDto, auth: string) {
-    const token = auth.split(' ') ?? [];
-    const { id } = this.jwtService.decode(token[1]);
-    const user = await this.userService.getUser(id, true);
+  async createBuilding(data: CreateBuildingDto, userId: number) {
+    console.log(userId);
+
+    const user = await this.userService.getUser(userId, true);
     const { date, ...dataToCreateBuilding } = data;
 
     if (user && user.building.length > 3)
@@ -28,7 +26,7 @@ export class BuildsService {
     const building = await this.prisma.building.create({
       data: {
         ...dataToCreateBuilding,
-        userId: id,
+        userId: userId,
         booking: {
           create: {
             deadline: new Date(date),
@@ -41,7 +39,7 @@ export class BuildsService {
   }
 
   // first page provides page as 0, second as 1, third as 2, etc...
-  async getAllBuildings(page: number, filters: FiltersDto) {
+  async getAllBuildings(page: number, filters: filterBuildingDto) {
     return await this.prisma.building.findMany({
       take: 10,
       skip: 10 * page,
@@ -73,14 +71,24 @@ export class BuildsService {
       where: {
         id: id,
       },
+      include: {
+        booking: {
+          where: {
+            buildingId: id,
+          },
+        },
+      },
     });
   }
 
-  async updateBuilding({ id, ...data }: UpdateBuildingDto, userId: number) {
-    await this.checkBuilding(id, userId);
+  async updateBuilding(
+    { buildingId, ...data }: UpdateBuildingDto,
+    userId: number,
+  ) {
+    await this.checkBuilding(buildingId, userId);
     return this.prisma.building.update({
       where: {
-        id: id,
+        id: buildingId,
       },
       data: { ...data },
     });

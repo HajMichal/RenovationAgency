@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/providers/prisma/prisma.service';
-import { LoginDto, UpdateDto, CreateUserDto } from './dto';
+import { CreateUserDto, LoginDto, UpdateUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -15,6 +15,22 @@ export class UserService {
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
+  async getUser(
+    id: number,
+    includeBuilding?: boolean,
+    includeContractor?: boolean,
+  ) {
+    if (!id) throw new NotFoundException('User not found');
+    return await this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        building: includeBuilding ?? false,
+        contractor: includeContractor ?? false,
+      },
+    });
+  }
 
   async createUser(data: CreateUserDto) {
     const user = await this.findFirstUser(data.email, data.phone);
@@ -28,18 +44,6 @@ export class UserService {
 
     return this.prisma.user.create({
       data: { ...data, password: hashedPassword },
-    });
-  }
-
-  async getUser(id: number, includeBuilding?: boolean) {
-    if (!id) throw new NotFoundException('User not found');
-    return await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        building: includeBuilding ?? false,
-      },
     });
   }
 
@@ -58,17 +62,19 @@ export class UserService {
     };
   }
 
-  async updateUser(data: UpdateDto) {
-    const user = await this.findFirstUser(data?.email, data.phone);
+  async updateUser(data: UpdateUserDto, userId: number) {
+    const user = await this.findFirstUser(data?.email, data?.phone);
+
     if (user)
       throw new ConflictException('This Email or Phone number is taken');
+
     const hashedPassword = await this.hashPassword(data.password);
     const updatedUser = this.prisma.user.update({
       where: {
-        id: data.id,
+        id: userId,
       },
       data: {
-        adress: data.adress,
+        address: data.address,
         name: data.name,
         email: data.email,
         phone: data.phone,

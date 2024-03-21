@@ -1,5 +1,12 @@
-import { CreateBuildingDto } from './create.dto';
-import { UpdateBuildingDto } from './update.dto';
-import { FiltersDto } from './filters.dto';
+import { CreateBuildingDto, createBuildingSchema } from './create.dto';
+import { UpdateBuildingDto, updateBuildingSchema } from './update.dto';
+import { filterBuildingDto, filterBuildingSchema } from './filters.dto';
 
-export { CreateBuildingDto, UpdateBuildingDto, FiltersDto };
+export {
+  CreateBuildingDto,
+  UpdateBuildingDto,
+  filterBuildingDto,
+  filterBuildingSchema,
+  createBuildingSchema,
+  updateBuildingSchema,
+};

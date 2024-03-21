@@ -1,10 +1,11 @@
 import { z } from 'zod';
-export const updateSchema = z.object({
+
+export const createContractorSchema = z.object({
   name: z.string().optional(),
   email: z.string().optional(),
   phone: z.string().optional(),
   address: z.string().optional(),
-  password: z.string().optional(),
+  nip: z.string().optional(),
 });
 
-export type UpdateUserDto = z.infer<typeof updateSchema>;
+export type CreateContractorDto = z.infer<typeof createContractorSchema>;

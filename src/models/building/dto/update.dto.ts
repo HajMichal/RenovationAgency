@@ -1,9 +1,13 @@
-export declare class UpdateBuildingDto {
-  id: number;
-  title?: string;
-  adress?: string;
-  city?: string;
-  zipcode?: string;
-  description?: string;
-  estimatedcost?: string;
-}
+import { z } from 'zod';
+
+export const updateBuildingSchema = z.object({
+  buildingId: z.number(),
+  title: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  zipcode: z.string().optional(),
+  description: z.string().optional(),
+  estimatedcost: z.string().optional(),
+});
+
+export type UpdateBuildingDto = z.infer<typeof updateBuildingSchema>;

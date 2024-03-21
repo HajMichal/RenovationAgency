@@ -3,7 +3,7 @@ CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
-    `adress` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `createdat` DATETIME(3) NOT NULL,
 
@@ -28,7 +28,7 @@ CREATE TABLE `Contractor` (
 CREATE TABLE `Building` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
-    `adress` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
     `city` VARCHAR(191) NOT NULL,
     `zipcode` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,

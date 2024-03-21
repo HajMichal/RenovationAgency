@@ -12,7 +12,7 @@ model User {
   name      String
   email     String  @unique
   phone     String  @unique
-  adress    String
+  address    String
   password  String
   createdat DateTime @default(now())
 
@@ -25,9 +25,9 @@ model Contractor {
   companyName      String
   companyEmail     String   @unique
   companyPhone     String   @unique
-  companyAdress    String
+  companyAddress    String
   nip              String?  @unique
-  createdat        DateTime
+  createdat        DateTime @default(now())
 
   userId           Int       @unique
   user             User      @relation(fields: [userId], references: [id])
@@ -37,7 +37,7 @@ model Contractor {
 model Building {
   id            Int    @default(autoincrement()) @unique
   title         String
-  adress        String
+  address        String
   city          String
   zipcode       String
   description   String
@@ -54,7 +54,7 @@ model Booking {
   deadline      DateTime
 
   buildingId    Int         @unique
-  building      Building    @relation(fields: [buildingId], references: [id])
+  building      Building    @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   contractorId  Int? 
   contractor    Contractor?  @relation(fields: [contractorId], references: [id])
 }

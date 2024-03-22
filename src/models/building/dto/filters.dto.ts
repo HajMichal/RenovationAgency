@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
 export const filterBuildingSchema = z.object({
-  gt: z.string().optional(),
-  lt: z.string().optional(),
+  gtPrice: z.string().optional(),
+  ltPrice: z.string().optional(),
+  gtArea: z.string().optional(),
+  ltArea: z.string().optional(),
   city: z.string().optional(),
   zipcode: z.string().optional(),
 });

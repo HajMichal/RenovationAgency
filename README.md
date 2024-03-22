@@ -27,6 +27,7 @@
  - Create get all Buildings endpoint, set it as Public [✔️]
  - List with buildings can be filtered by: [✔️]
   * estimated cost, [✔️]
+  * estimated area, [✔️]
   * city, [✔️]
   * zip-code, [✔️]
   * deadline
@@ -37,10 +38,8 @@
  - storing images uploaded by users showing state of building
  
 ## Ideas:
- - user can set a opinion about constructor job
- - users can review constructors and theirs opinion
+ - user can set an opinion about constructor job
+ - users can review constructors and theirs opinions
  - make role admin, he has access to update/delete all elements in app
  - user can open chat with contractor and vice versa
 
- # TODO:
-### Create interceptor/guard/pipe which will check if id of model (building, user, ...rest) is equal to provided id by client 

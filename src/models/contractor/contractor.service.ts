@@ -41,10 +41,10 @@ export class ContractorService {
     });
   }
 
-  async updateContractorPorfile(data: CreateContractorDto) {
+  async updateContractorPorfile(data: CreateContractorDto, userId: number) {
     return await this.prisma.contractor.update({
       where: {
-        id: data.contractorId,
+        userId: userId,
       },
       data: {
         companyAddress: data?.address,
@@ -56,7 +56,7 @@ export class ContractorService {
     });
   }
 
-  async bookBuilding(data: BookBuildingDto) {
+  async bookBuilding(data: BookBuildingDto, userId: number) {
     return await this.prisma.booking.update({
       where: {
         id: data.bookingId,
@@ -64,7 +64,7 @@ export class ContractorService {
       data: {
         contractor: {
           connect: {
-            id: data.contractorId,
+            userId: userId,
           },
         },
       },

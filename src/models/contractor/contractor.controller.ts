@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { contractor } from 'src/common/constatns/modelsEndpoints';
 import { ContractorService } from './contractor.service';
 import { CreateContractorDto, createContractorSchema } from './dto/create.dto';
@@ -22,15 +22,24 @@ export class ContractorController {
   }
 
   @Patch('update/data')
-  @UsePipes(new DataValidationPipe(createContractorSchema))
-  updateContractorProfile(@Body() userData: CreateContractorDto) {
-    return this.contractorService.updateContractorPorfile(userData);
+  updateContractorProfile(
+    @Body(new DataValidationPipe(createContractorSchema))
+    contractorData: CreateContractorDto,
+    @User() user: UserDto,
+  ) {
+    return this.contractorService.updateContractorPorfile(
+      contractorData,
+      user.id,
+    );
   }
 
   @Patch('update/bookBuilding')
-  @UsePipes(new DataValidationPipe(bookBuildingSchema))
-  bookBuilding(@Body() bookingData: BookBuildingDto) {
-    return this.contractorService.bookBuilding(bookingData);
+  bookBuilding(
+    @Body(new DataValidationPipe(bookBuildingSchema))
+    bookingData: BookBuildingDto,
+    @User() user: UserDto,
+  ) {
+    return this.contractorService.bookBuilding(bookingData, user.id);
   }
 
   @Get()

@@ -7,7 +7,8 @@ export const updateBuildingSchema = z.object({
   city: z.string().optional(),
   zipcode: z.string().optional(),
   description: z.string().optional(),
-  estimatedcost: z.string().optional(),
+  estimatedCost: z.string().optional(),
+  estimatedArea: z.string().optional(),
 });
 
 export type UpdateBuildingDto = z.infer<typeof updateBuildingSchema>;

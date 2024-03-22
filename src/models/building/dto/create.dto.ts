@@ -7,7 +7,8 @@ export const createBuildingSchema = z
     city: z.string(),
     zipcode: z.string(),
     description: z.string(),
-    estimatedcost: z.string(),
+    estimatedArea: z.string(),
+    estimatedCost: z.string(),
     date: z.string(),
   })
   .required();

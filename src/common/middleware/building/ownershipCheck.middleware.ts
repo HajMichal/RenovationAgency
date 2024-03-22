@@ -1,6 +1,7 @@
 import {
   Injectable,
   NestMiddleware,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -18,13 +19,15 @@ export class BuildingOwnershipCheckMiddleware implements NestMiddleware {
     const token = req.headers.authorization;
     if (!token) throw new UnauthorizedException('Not right access');
     const user = this.jwt.decode(token.split(' ')[1]);
-    const buildingId = req.body.id;
+    const buildingId = req.body.buildingId;
     const building = await this.prisma.building.findFirst({
       where: {
         id: buildingId,
       },
     });
-    if (user.id === building?.userId) return next();
+
+    if (!building) throw new NotFoundException('Building not found');
+    else if (user.id === building?.userId) return next();
     else throw new UnauthorizedException('Not right access');
   }
 }

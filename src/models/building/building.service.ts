@@ -16,13 +16,12 @@ export class BuildingsService {
   ) {}
 
   async createBuilding(data: CreateBuildingDto, userId: number) {
-    console.log(userId);
-
     const user = await this.userService.getUser(userId, true);
     const { date, ...dataToCreateBuilding } = data;
 
     if (user && user.building.length > 3)
       throw new ConflictException('Your account has too many advertisments');
+
     const building = await this.prisma.building.create({
       data: {
         ...dataToCreateBuilding,
@@ -46,8 +45,10 @@ export class BuildingsService {
       where: {
         city: { contains: filters.city },
         AND: [
-          { estimatedcost: { gte: filters.gt } },
-          { estimatedcost: { lte: filters.lt } },
+          { estimatedCost: { gte: filters.gtPrice } },
+          { estimatedCost: { lte: filters.ltPrice } },
+          { estimatedArea: { gte: filters.gtArea } },
+          { estimatedArea: { lte: filters.ltArea } },
         ],
         zipcode: { contains: filters.zipcode },
       },
@@ -81,12 +82,8 @@ export class BuildingsService {
     });
   }
 
-  async updateBuilding(
-    { buildingId, ...data }: UpdateBuildingDto,
-    userId: number,
-  ) {
-    await this.checkBuilding(buildingId, userId);
-    return this.prisma.building.update({
+  async updateBuilding({ buildingId, ...data }: UpdateBuildingDto) {
+    return await this.prisma.building.update({
       where: {
         id: buildingId,
       },

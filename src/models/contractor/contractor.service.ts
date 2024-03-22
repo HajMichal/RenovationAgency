@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/providers/prisma/prisma.service';
 import { UserService } from '../user/user.service';
-import { CreateContractorDto, BookBuildingDto } from './dto';
+import { CreateContractorDto } from './dto';
 
 @Injectable()
 export class ContractorService {
@@ -44,7 +44,7 @@ export class ContractorService {
   async updateContractorPorfile(data: CreateContractorDto, userId: number) {
     return await this.prisma.contractor.update({
       where: {
-        userId: userId,
+        userId,
       },
       data: {
         companyAddress: data?.address,
@@ -56,25 +56,10 @@ export class ContractorService {
     });
   }
 
-  async bookBuilding(data: BookBuildingDto, userId: number) {
-    return await this.prisma.booking.update({
-      where: {
-        id: data.bookingId,
-      },
-      data: {
-        contractor: {
-          connect: {
-            userId: userId,
-          },
-        },
-      },
-    });
-  }
-
   async getContractor(userId: number) {
     return await this.prisma.contractor.findFirst({
       where: {
-        userId: userId,
+        userId,
       },
     });
   }

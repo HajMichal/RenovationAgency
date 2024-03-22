@@ -23,7 +23,7 @@ export class UserService {
     if (!id) throw new NotFoundException('User not found');
     return await this.prisma.user.findUnique({
       where: {
-        id: id,
+        id,
       },
       include: {
         building: includeBuilding ?? false,
@@ -89,7 +89,7 @@ export class UserService {
     if (!user) throw new NotFoundException();
     return await this.prisma.user.delete({
       where: {
-        id: id,
+        id,
       },
     });
   }

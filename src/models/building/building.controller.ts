@@ -44,8 +44,8 @@ export class BuildingsController {
   }
 
   @Delete('remove/:id')
-  removeBuilding(@Param('id', ParseIntPipe) id: number, @User() user: UserDto) {
-    return this.buildingsService.removeBuilding(id, user.id);
+  removeBuilding(@Param('id', ParseIntPipe) id: number) {
+    return this.buildingsService.removeBuilding(id);
   }
 
   @Public()

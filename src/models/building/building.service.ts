@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/providers/prisma/prisma.service';
 import { UserService } from 'src/models/user/user.service';
 import { CreateBuildingDto, filterBuildingDto, UpdateBuildingDto } from './dto';
@@ -61,16 +56,15 @@ export class BuildingsService {
   async getBuilding(id: number) {
     return await this.prisma.building.findFirst({
       where: {
-        id: id,
+        id,
       },
     });
   }
 
-  async removeBuilding(id: number, userId: number) {
-    await this.checkBuilding(id, userId);
+  async removeBuilding(id: number) {
     return this.prisma.building.delete({
       where: {
-        id: id,
+        id,
       },
       include: {
         booking: {
@@ -89,13 +83,5 @@ export class BuildingsService {
       },
       data: { ...data },
     });
-  }
-
-  async checkBuilding(id: number, userId: number) {
-    const building = await this.getBuilding(id);
-    if (!building) throw new NotFoundException();
-
-    const ownerId = building.userId;
-    if (ownerId !== userId) throw new UnauthorizedException('Not right access');
   }
 }

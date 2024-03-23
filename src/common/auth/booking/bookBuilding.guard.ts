@@ -40,7 +40,7 @@ export class BookBuildingGuard implements CanActivate {
     });
     if (!building) throw new NotFoundException('Building not exist');
 
-    if (building?.booking)
+    if (building?.booking?.contractorId)
       throw new ConflictException('Building is already booked');
 
     return true;

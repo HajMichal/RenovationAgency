@@ -21,7 +21,6 @@ export class UserModule {
           method: RequestMethod.POST,
         },
         { path: `${user}/(.*)`, method: RequestMethod.GET },
-        // `${contractor}/(.*)`,
       )
       .forRoutes(UserController);
   }

@@ -18,12 +18,12 @@ import {
   UpdateUserDto,
   UserDto,
 } from './dto';
-import { Public } from 'src/common/auth/auth.guard';
 import { UserService } from './user.service';
 import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
 import { User as UserDataType } from '@prisma/client';
 import { user } from 'src/common/constatns/modelsEndpoints';
 import { User } from 'src/common/decorators';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller(user)
 export class UserController {

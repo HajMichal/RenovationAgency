@@ -22,7 +22,6 @@ export class BuildsModule {
           method: RequestMethod.POST,
         },
         { path: `${building}/(.*)`, method: RequestMethod.GET },
-        // `${contractor}/(.*)`,
       )
       .forRoutes(BuildingsController);
   }

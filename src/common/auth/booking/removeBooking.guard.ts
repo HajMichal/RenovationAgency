@@ -40,7 +40,7 @@ export class RemoveBookingGuard implements CanActivate {
     });
     if (!building) throw new NotFoundException('Building not exist');
 
-    if (building?.booking) return true;
+    if (building?.booking?.contractorId) return true;
     else throw new NotFoundException('Booking not found');
   }
 }

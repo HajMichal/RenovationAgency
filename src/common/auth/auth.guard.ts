@@ -6,11 +6,9 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { SetMetadata } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -24,7 +22,7 @@ export class AuthService implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    //  if decorator equals @Public, then not logged user can hit endpoint
+
     if (isPublic) {
       return true;
     }
@@ -40,8 +38,7 @@ export class AuthService implements CanActivate {
       const payload = await this.jwtServices.verifyAsync(token, {
         secret: process.env.SECRET_KEY,
       });
-      //   We are assigning { user: payload } object to the request object
-      //     so we can access users payload in routes
+
       request['user'] = payload;
       return true;
     } catch (error) {

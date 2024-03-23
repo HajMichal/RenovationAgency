@@ -21,8 +21,8 @@ import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
 import { building } from 'src/common/constatns/modelsEndpoints';
 import { User } from 'src/common/decorators';
 import { UserDto } from '../user/dto';
-import { Public } from 'src/common/auth/auth.guard';
 import { BuildingsService } from './building.service';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller(building)
 export class BuildingsController {

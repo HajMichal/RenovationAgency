@@ -4,10 +4,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/providers/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto, LoginDto, UpdateUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
@@ -85,21 +85,20 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
-    const user = await this.getUser(id);
-    if (!user) throw new NotFoundException();
-    return await this.prisma.user.delete({
+    await this.prisma.user.delete({
       where: {
         id,
       },
     });
+    return { message: 'User was deleted correctly' };
   }
 
-  private async hashPassword(password: string | undefined) {
+  async hashPassword(password: string | undefined) {
     const salt = await bcrypt.genSalt();
     if (password) return await bcrypt.hash(password, salt);
   }
 
-  private async findFirstUser(email?: string, phone?: string) {
+  async findFirstUser(email?: string, phone?: string) {
     return await this.prisma.user.findFirst({
       where: {
         OR: [{ email: email }, { phone: phone }],

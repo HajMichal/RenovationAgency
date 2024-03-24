@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { PrismaService } from 'src/providers/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserOwnershipCheckMiddleware } from 'src/common/middleware/user/userOwnershipCheck.middleware';
 import { user } from 'src/common/constatns/modelsEndpoints';

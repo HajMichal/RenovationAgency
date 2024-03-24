@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -19,18 +17,18 @@ import {
   UserDto,
 } from './dto';
 import { UserService } from './user.service';
-import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
-import { User as UserDataType } from '@prisma/client';
-import { user } from 'src/common/constatns/modelsEndpoints';
-import { User } from 'src/common/decorators';
-import { Public } from 'src/common/decorators/public.decorator';
+import { DataValidationPipe } from '../../common/pipes/validateData.pipe';
+import { User as IUser } from '@prisma/client';
+import { user as userEndpoint } from '../../common/constatns/modelsEndpoints';
+import { User } from '../../common/decorators';
+import { Public } from '../../common/decorators/public.decorator';
 
-@Controller(user)
+@Controller(userEndpoint)
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  getUser(@User() user: UserDto): Promise<UserDataType | null> {
+  getUser(@User() user: UserDto): Promise<IUser | null> {
     return this.userService.getUser(user.id);
   }
 
@@ -59,8 +57,8 @@ export class UserController {
     return this.userService.updateUser(userData, user.id);
   }
 
-  @Delete('remove/:id')
-  removeUser(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.deleteUser(id);
+  @Delete('remove')
+  removeUser(@User() user: UserDto) {
+    return this.userService.deleteUser(user.id);
   }
 }

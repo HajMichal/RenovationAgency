@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/providers/prisma/prisma.service';
-import { UserService } from 'src/models/user/user.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { UserService } from 'src/modules/user/user.service';
 import { CreateBuildingDto, filterBuildingDto, UpdateBuildingDto } from './dto';
 
 @Injectable()

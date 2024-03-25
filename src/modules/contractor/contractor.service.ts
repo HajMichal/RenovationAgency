@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { CreateContractorDto } from './dto';
 
@@ -64,7 +64,7 @@ export class ContractorService {
     });
   }
 
-  private async findContractor(email?: string, phone?: string) {
+  async findContractor(email?: string, phone?: string) {
     return await this.prisma.contractor.findFirst({
       where: {
         OR: [{ companyEmail: email }, { companyPhone: phone }],

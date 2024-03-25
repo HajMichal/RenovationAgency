@@ -17,12 +17,12 @@ import {
   UpdateBuildingDto,
   updateBuildingSchema,
 } from './dto';
-import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
-import { building } from 'src/common/constatns/modelsEndpoints';
-import { User } from 'src/common/decorators';
+import { DataValidationPipe } from '../../common/pipes/validateData.pipe';
+import { building } from '../../common/constatns/modelsEndpoints';
+import { User } from '../../common/decorators';
 import { UserDto } from '../user/dto';
 import { BuildingsService } from './building.service';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller(building)
 export class BuildingsController {

@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from 'src/modules/user/user.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { UserService } from '../../modules/user/user.service';
 import { CreateBuildingDto, filterBuildingDto, UpdateBuildingDto } from './dto';
 
 @Injectable()
@@ -58,11 +58,15 @@ export class BuildingsService {
       where: {
         id,
       },
+      include: {
+        booking: true,
+        user: true,
+      },
     });
   }
 
   async removeBuilding(id: number) {
-    return this.prisma.building.delete({
+    await this.prisma.building.delete({
       where: {
         id,
       },
@@ -74,6 +78,9 @@ export class BuildingsService {
         },
       },
     });
+    return {
+      message: 'Building was deleted correctly',
+    };
   }
 
   async updateBuilding({ buildingId, ...data }: UpdateBuildingDto) {

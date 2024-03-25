@@ -43,6 +43,7 @@ model Building {
   description   String  @db.LongText
   estimatedCost String
   estimatedArea String
+  date          DateTime @default(now())
   // images ??  
   
   userId        Int

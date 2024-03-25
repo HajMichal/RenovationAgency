@@ -152,7 +152,7 @@ describe('User Service', () => {
     });
 
     describe('deleteUser', () => {
-      it('should return successfull message', async () => {
+      it('should return successful message', async () => {
         const response = await userService.deleteUser(2);
 
         expect(prisma.user.delete).toHaveBeenCalledTimes(1);

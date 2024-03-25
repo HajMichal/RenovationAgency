@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { BookingController } from './booking.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { CheckBuildingMiddleware } from 'src/common/middleware/booking/checkBuilding.middleware';
+import { CheckBuildingMiddleware } from '../../common/middleware/booking/checkBuilding.middleware';
 
 @Module({
   controllers: [BookingController],

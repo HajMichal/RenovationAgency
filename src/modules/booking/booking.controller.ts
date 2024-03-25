@@ -6,12 +6,12 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { booking } from 'src/common/constatns/modelsEndpoints';
+import { booking } from '../../common/constatns/modelsEndpoints';
 import { BookingService } from './booking.service';
 import { BookBuildingDto, bookBuildingSchema } from './dto';
-import { DataValidationPipe } from 'src/common/pipes/validateData.pipe';
-import { BookBuildingGuard } from 'src/common/auth/booking/bookBuilding.guard';
-import { RemoveBookingGuard } from 'src/common/auth/booking/removeBooking.guard';
+import { DataValidationPipe } from '../../common/pipes/validateData.pipe';
+import { BookBuildingGuard } from '../../common/auth/booking/bookBuilding.guard';
+import { RemoveBookingGuard } from '../../common/auth/booking/removeBooking.guard';
 
 @UsePipes(new DataValidationPipe(bookBuildingSchema))
 @Controller(booking)

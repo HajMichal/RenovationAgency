@@ -56,4 +56,10 @@ export class BuildingsController {
   ) {
     return this.buildingsService.getAllBuildings(page, filters);
   }
+
+  @Public()
+  @Get(':buildingId')
+  getSingleBuilding(@Param('buildingId', ParseIntPipe) buildingId: number) {
+    return this.buildingsService.getBuilding(buildingId);
+  }
 }
